@@ -12,7 +12,7 @@ class Song extends Model
 
     public function getUrlAttribute()
     {
-        return 'http://localhost:8000/api/storage/' . $this->path . '?token=' . Auth::user()->api_token;
+        return env('APP_URL') . '/api/storage/' . $this->path . '?token=' . Auth::user()->api_token;
     }
 
     public function access()

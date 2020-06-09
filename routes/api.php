@@ -20,6 +20,9 @@ Route::post('/signin', 'Auth\LoginController@login');
 Route::get('/storage/songs/{path}', 'SongController@getFile');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', 'Auth\LoginController@logout');
+    Route::get('/user', function () {
+        return \Illuminate\Support\Facades\Auth::user();
+    });
     Route::group(['prefix' => 'songs'], function () {
         Route::get('/', 'SongController@index');
         Route::patch('/{song}', 'SongController@update');

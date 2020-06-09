@@ -1,4 +1,5 @@
 <?php
+$_SERVER['HTTP_ACCEPT'] = 'application/json';
 
 /**
  * Laravel - A PHP Framework For Web Artisans
