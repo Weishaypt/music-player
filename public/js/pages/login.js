@@ -60,6 +60,7 @@ export default {
         state.token = data.data.token
         document.cookie = "token=" + state.token
         await actions.getUser()
+        this.redirectRoute('/user')
       }
 
     }

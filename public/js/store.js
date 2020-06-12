@@ -1,6 +1,3 @@
-let auth = false
-let user = null
-
 export const state = {
   user: null,
   auth:  false,
@@ -10,21 +7,29 @@ export const state = {
 
 export const actions = {
   async getUser () {
-    const data = await axios.get('/api/user')
-    if(data.status === 200)
-    {
-      state.user = data.data
-      state.auth = true
+    try {
+      const data = await axios.get('/api/user')
+      if(data.status === 200)
+      {
+        state.user = data.data
+        state.auth = true
+      }
     }
-    else {
+    catch (e) {
+      console.log('unauth')
       state.auth = false
       state.token = ""
       document.cookie = "token="
     }
+  },
+  async init () {
+    state.token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    if(state.token !== "")
+    {
+      axios.default.defaults.headers.common['Authorization'] = `Bearer ${state.token}`
+      actions.getUser()
+    }
   }
 }
-state.token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")
-if(state.token !== "")
-{
-  actions.getUser()
-}
+
+actions.init()

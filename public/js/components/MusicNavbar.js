@@ -5,10 +5,8 @@ export default {
   template: `
           <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="/">
-                    Music Player
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+							  <v-link to="/">Music Player</v-link>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -23,19 +21,19 @@ export default {
                         <!-- Authentication Links -->
                         <template v-if="!state.auth">
 													<li class="nav-item">
-														<a class="nav-link" href="login">Login</a>
+                            <v-link to="/login">Login</v-link>
 													</li>
 													<li class="nav-item">
 														<a class="nav-link" href="register">Register</a>
 													</li>
                         </template>
                         <template v-else>
-													<li class="nav-item dropdown">
-														<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-															<span class="caret"> {{ state.user.email }}  </span>
+													<li class="nav-item dropdown" v-if="state.user">
+														<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="caret"> {{ state.user.name }}  </span>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-															<a class="dropdown-item" href="logout" >
+															<a class="dropdown-item" href="logout" @click="logout">
                                 Logout
 															</a>
 														</div>
@@ -51,6 +49,14 @@ export default {
       state: state
     }
   },
-  async mounted() {
+  methods: {
+    async logout (e) {
+      e.preventDefault()
+      await axios.post('/api/logout')
+      this.redirectRoute('/login')
+      state.token = null
+      state.auth = false
+      state.user = null
+    }
   }
 }
